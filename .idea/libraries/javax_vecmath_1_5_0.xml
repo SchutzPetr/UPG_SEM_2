@@ -1,0 +1,11 @@
+<component name="libraryTable">
+  <library name="javax.vecmath_1.5.0">
+    <CLASSES>
+      <root url="jar://P:/Java Lib/javax.vecmath_1.5.0.jar!/" />
+    </CLASSES>
+    <JAVADOC>
+      <root url="http://download.java.net/media/java3d/javadoc/1.5.0/javax/vecmath/package-summary.html" />
+    </JAVADOC>
+    <SOURCES />
+  </library>
+</component>
