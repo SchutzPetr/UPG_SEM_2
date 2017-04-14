@@ -11,9 +11,9 @@ package entity;
  */
 public class Position {
     /**
-     * Souřadnice x a y
+     * Souřadnice x a y a z
      */
-    private final double x, y;
+    private final double x, y, z;
 
 
     /**
@@ -22,9 +22,10 @@ public class Position {
      * @param x souřadnice x
      * @param y souřadnice y
      */
-    public Position(double x, double y) {
+    public Position(double x, double y, double z) {
         this.x = x;
         this.y = y;
+        this.z = z;
     }
 
     /**
@@ -43,5 +44,14 @@ public class Position {
      */
     public double getY() {
         return y;
+    }
+
+    /**
+     * Metoda navrací souřadnice z
+     *
+     * @return z
+     */
+    public double getZ() {
+        return z;
     }
 }

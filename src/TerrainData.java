@@ -160,19 +160,36 @@ public class TerrainData {
         int xx = (int) ((x * 1000) / deltaX);
         int yy = (int) ((y * 1000) / deltaY);
 
-        corners[0] = terrain[yy][xx]/1000;
-        corners[1] = terrain[yy][xx+1]/1000;
-        corners[2] = terrain[yy+1][xx+1]/1000;
-        corners[3] = terrain[yy+1][xx]/1000;
-
+        if(yy == terrain.length-1 && xx == terrain[0].length-1){
+            corners[0] = terrain[yy][xx]/1000;
+            corners[1] = terrain[yy][xx]/1000;
+            corners[2] = terrain[yy][xx]/1000;
+            corners[3] = terrain[yy][xx]/1000;
+        }else if(yy == terrain.length-1){
+            corners[0] = terrain[yy][xx]/1000;
+            corners[1] = terrain[yy][xx+1]/1000;
+            corners[2] = terrain[yy][xx+1]/1000;
+            corners[3] = terrain[yy][xx]/1000;
+        }else if(xx == terrain.length-1){
+            corners[0] = terrain[yy][xx]/1000;
+            corners[1] = terrain[yy][xx]/1000;
+            corners[2] = terrain[yy-1][xx]/1000;
+            corners[3] = terrain[yy-1][xx]/1000;
+        }else{
+            corners[0] = terrain[yy][xx]/1000;
+            corners[1] = terrain[yy][xx+1]/1000;
+            corners[2] = terrain[yy-1][xx+1]/1000;
+            corners[3] = terrain[yy-1][xx]/1000;
+        }
         return corners;
     }
 
     /**
      * Navrací výšku v daném bodě
      *
-     * @param x souřadnice v metrex
-     * @param y souřadnice v metrex
+     * @param x souřadnice v metrech
+     * @param y souřadnice v metrech
+     *
      * @return výšku v daném bodě
      */
     public double getAltitudeInM(double x, double y) {
@@ -187,5 +204,19 @@ public class TerrainData {
         double z = yy*(v-u)+u;
 
         return z;
+    }
+
+    /**
+     * @return Navrací výšku střelce v metrech
+     */
+    public double getShooterAltitudeInM() {
+        return terrain[this.getShooterY()][this.getShooterX()]/1000;
+    }
+
+    /**
+     * @return Navrací výšku cíle v metrech
+     */
+    public double getTargetAltitudeInM() {
+        return terrain[this.getTargetY()][this.getTargetX()]/1000;
     }
 }

@@ -58,7 +58,7 @@ public abstract class Entity extends Point {
         double x = this.column * widthOfColumn;
         double y = this.row * heightOfColumn;
 
-        this.setPosition(new Position(x, y));
+        this.setPosition(new Position(x, y, this.getPosition().getZ()));
 
         this.imageView.setLayoutX(x - 13);
         this.imageView.setLayoutY(y - 13);

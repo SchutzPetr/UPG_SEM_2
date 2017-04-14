@@ -2,6 +2,12 @@ import entity.HitSpot;
 import entity.Position;
 import entity.Shooter;
 import entity.Target;
+import javafx.scene.paint.Color;
+import javafx.scene.shape.CubicCurve;
+import javafx.scene.shape.Line;
+
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * Created by Petr Schutz on 21.03.2017
@@ -52,23 +58,165 @@ public class ShootingCalculator {
         this.shooter = shooter;
         this.target = target;
 
-        this.hitSpot = new HitSpot(new Position(0,0), gameManager.getGamePane());
+        this.hitSpot = new HitSpot(new Position(0,0, 0), gameManager.getGamePane());
     }
 
-    public void newCalculator(double azimuth, double elevation, double speed){
-        int windSpeed = 0;
+    /*public void shoot(double azimuth, double elevation, double speed){
+        double windSpeedX = 0;
+        double windSpeedY = -30;
+        double windSpeedZ = 0;
 
-        double posX = shooter.getPosition().getX();
-        double posY = shooter.getPosition().getY();
-        double posZ = gameManager.getTerrainData().getAltitudeInM(posX, posY);
+        double posX = 0;
+        double posY = 0;
+        double posZ = 0;
 
         double prevVX = 100;
+        double prevVY = 0;
+        double prevVZ = 100;
 
-        for (double i = 0; true; i+=0.1) {
-            double currentX = prevVX+0*i-(windSpeed-prevVX)*0.05;
+        List<Vector> trajectoryVectors = new ArrayList<>();
+        List<Vector> vectors = new ArrayList<>();
+
+        trajectoryVectors.add(new Vector(posX+prevVX*0.01, posY+prevVY*0.01, posZ+prevVZ*0.01));
+
+        Vector trajectoryVector = trajectoryVectors.get(0);
+
+        for (int i = 1; i < 100; i++) {
+            prevVX = prevVX-(prevVX-windSpeedX)*0.01*0.05;
+            prevVY = prevVY-(prevVY-windSpeedY)*0.01*0.05;
+            prevVZ = prevVZ + (-10*0.01)-(prevVZ-windSpeedZ)*0.01*0.05;
+
+            trajectoryVector = new Vector(trajectoryVector.getX()+prevVX*0.01, trajectoryVector.getY()+prevVY*0.01, trajectoryVector.getZ()+prevVZ*0.01);
+            trajectoryVectors.add(trajectoryVector);
+
+            double x = Math.cos(Math.toRadians(azimuth)) * Math.abs(trajectoryVector.getX()-posX);
+            double y = Math.sin(Math.toRadians(azimuth)) * Math.abs(trajectoryVector.getX()-posX);
+
+            Line line = new Line();
+
+            line.setStartX(lastPosX);
+            line.setStartY(lastPosY);
+
+            lastPosX = shooter.getPosition().getX()+(x*this.gameManager.getScale());
+            lastPosY = shooter.getPosition().getY()+(y*this.gameManager.getScale()*trajectoryVector.getY());
+
+            line.setEndX(lastPosX);
+            line.setEndY(lastPosY);
+
+            line.setStroke(Color.RED);
+            line.setStrokeWidth(1);
+
+            lines.add(line);
+
         }
 
+
+
+
+    }*/
+
+    private final List<Line> lines = new ArrayList<>();
+
+    private final List<PositionVector> positionVectors = new ArrayList<>();
+
+    public void newCalculator2(double azimuth, double elevation, double speed){
+
+        this.gameManager.getGamePane().getChildren().removeAll(lines);
+
+        lines.clear();
+
+        double windSpeedX = 0;
+        double windSpeedY = -30;
+        double windSpeedZ = 0;
+
+        double posX = 0;
+        double posY = 0;
+        double posZ = shooter.getPosition().getZ();
+
+        double prevVX = 100;
+        double prevVY = 0;
+        double prevVZ = 1000;
+
+        double lastPosX = shooter.getPosition().getX();
+        double lastPosY = shooter.getPosition().getY();
+
+        PositionVector trajectoryVector = new PositionVector(posX+prevVX*0.01, posY+prevVY*0.01, posZ+prevVZ*0.01);
+
+        positionVectors.add(new PositionVector(lastPosX, lastPosY, lastPosX));
+
+        while(true){
+            prevVX = prevVX-(prevVX-windSpeedX)*0.01*0.05;
+            prevVY = prevVY-(prevVY-windSpeedY)*0.01*0.05;
+            prevVZ = prevVZ + (-10*0.01)-(prevVZ-windSpeedZ)*0.01*0.05;
+
+            trajectoryVector = new PositionVector(trajectoryVector.getX()+prevVX*0.01, trajectoryVector.getY()+prevVY*0.01, trajectoryVector.getZ()+prevVZ*0.01);
+
+            double x = Math.cos(Math.toRadians(azimuth)) * Math.abs(trajectoryVector.getX());
+            double y = Math.sin(Math.toRadians(azimuth)) * Math.abs(trajectoryVector.getX());
+
+            Line line = new Line();
+
+            line.setStartX(lastPosX);
+            line.setStartY(lastPosY);
+
+            lastPosX = shooter.getPosition().getX()+(x*this.gameManager.getScale());
+            lastPosY = shooter.getPosition().getY()+(y*this.gameManager.getScale()*trajectoryVector.getY());
+
+            line.setEndX(lastPosX);
+            line.setEndY(lastPosY);
+
+            if(lastPosX < 0 || lastPosY < 0)break;
+
+            if(trajectoryVector.getZ() <= gameManager.getTerrainData().getAltitudeInM(lastPosX/this.gameManager.getScale(), lastPosY/this.gameManager.getScale())){
+                System.out.println("naraz!");
+                break;
+            }
+
+            System.out.println(trajectoryVector.getZ() + "-" + gameManager.getTerrainData().getAltitudeInM(lastPosX/this.gameManager.getScale(), lastPosY/this.gameManager.getScale()));
+
+            line.setStroke(Color.RED);
+            line.setStrokeWidth(1);
+
+            lines.add(line);
+
+        }
+
+        this.gameManager.getGamePane().getChildren().addAll(lines);
     }
+
+    /*
+    public void newCalculator2(double azimuth, double elevation, double speed){
+        double windSpeedX = 0;
+        double windSpeedY = 0;
+        double windSpeedZ = 0;
+
+        double posX = 0;
+        double posY = 0;
+        double posZ = 0;
+
+        double prevVX = 100;
+        double prevVY = 0;
+        double prevVZ = 100;
+
+        List<Vector> trajectoryVectors = new ArrayList<>();
+        List<Vector> vectors = new ArrayList<>();
+
+        trajectoryVectors.add(new Vector(posX+prevVX*0.01, posY+prevVY*0.01, posZ+prevVZ*0.01));
+
+        Vector trajectoryVector = trajectoryVectors.get(0);
+
+        for (int i = 1; i < 200; i++) {
+            prevVX = prevVX-(prevVX-windSpeedX)*0.01*0.05;
+            prevVY = prevVY-(prevVY-windSpeedY)*0.01*0.05;
+            prevVZ = prevVZ + (-10*0.01)-(prevVZ-windSpeedZ)*0.01*0.05;
+
+            trajectoryVector = new Vector(trajectoryVector.getX()+prevVX*0.01, trajectoryVector.getY()+prevVY*0.01, trajectoryVector.getZ()+prevVZ*0.01);
+            trajectoryVectors.add(trajectoryVector);
+        }
+
+        System.out.println(vectors);
+    }
+     */
 
     /*/**
      * Metoda vypočítá bod dopadu střely a vykreslí jí
@@ -125,5 +273,37 @@ public class ShootingCalculator {
      */
     public HitSpot getHitSpot() {
         return hitSpot;
+    }
+}
+
+class PositionVector {
+    final double x, y, z;
+
+
+    PositionVector(double x, double y, double z) {
+        this.x = x;
+        this.y = y;
+        this.z = z;
+    }
+
+    public double getX() {
+        return x;
+    }
+
+    public double getY() {
+        return y;
+    }
+
+    public double getZ() {
+        return z;
+    }
+
+    @Override
+    public String toString() {
+        return "{" +
+                "x=" + x +
+                ", y=" + y +
+                ", z=" + z +
+                '}';
     }
 }

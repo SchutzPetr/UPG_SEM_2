@@ -62,7 +62,7 @@ public class GameManager {
     /**
      * Meřítko herní mapy - kolik px na metr
      */
-    private double scale;
+    private double scale = 6.3;
 
     /**
      * Instance třídy {@code Target}
@@ -116,11 +116,18 @@ public class GameManager {
         this.gameController.setGame(new ImageView(SwingFXUtils.toFXImage(this.getMapImage(), null)));
 
         this.target = new Target(new Position(this.terrainData.getTargetX()*this.terrainData.getDeltaX(),
-                this.terrainData.getTargetY()*this.terrainData.getDeltaY()),this.terrainData.getTargetX(), this.terrainData.getTargetY(), this.getGamePane());
+                this.terrainData.getTargetY()*this.terrainData.getDeltaY(), this.terrainData.getShooterAltitudeInM()),
+                this.terrainData.getTargetX(), this.terrainData.getTargetY(), this.getGamePane());
 
         this.shooter = new Shooter(new Position(this.terrainData.getShooterX()*this.terrainData.getDeltaX(),
-                this.terrainData.getShooterY()*this.terrainData.getDeltaY()),this.terrainData.getShooterX(), this.terrainData.getShooterY(), this.getGamePane(), this.target);
+                this.terrainData.getShooterY()*this.terrainData.getDeltaY(), this.terrainData.getTargetAltitudeInM()),
+                this.terrainData.getShooterX(), this.terrainData.getShooterY(), this.getGamePane(), this.target);
+
+        calculator = new ShootingCalculator(this, this.shooter, this.target);
+
     }
+
+    private ShootingCalculator calculator;
 
     /**
      * Metoda, která vykresluje herní plochu
@@ -146,10 +153,10 @@ public class GameManager {
 
         this.scale = this.widthOfColumn / (this.terrainData.getDeltaX() / 1000);
 
-
         this.target.repaint(this.widthOfColumn, this.heightOfColumn);
         this.shooter.repaint(this.widthOfColumn, this.heightOfColumn);
 
+        this.calculator.newCalculator2(0, 0, 0);
     }
 
     public BufferedImage getMapImage() {
@@ -170,5 +177,9 @@ public class GameManager {
 
     public TerrainData getTerrainData() {
         return terrainData;
+    }
+
+    public double getScale() {
+        return scale;
     }
 }
