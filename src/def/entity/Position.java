@@ -1,4 +1,4 @@
-package entity;
+package def.entity;
 
 /**
  * Created by Petr Schutz on 20.03.2017
@@ -53,5 +53,14 @@ public class Position {
      */
     public double getZ() {
         return z;
+    }
+
+    @Override
+    public String toString() {
+        return "{" +
+                "x=" + x +
+                ", y=" + y +
+                ", z=" + z +
+                '}';
     }
 }

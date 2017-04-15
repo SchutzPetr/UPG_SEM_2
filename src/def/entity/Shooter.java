@@ -1,4 +1,4 @@
-package entity;
+package def.entity;
 
 import javafx.scene.layout.Pane;
 

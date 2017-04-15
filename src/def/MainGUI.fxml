@@ -9,15 +9,13 @@
 <?import javafx.scene.layout.ColumnConstraints?>
 <?import javafx.scene.layout.GridPane?>
 <?import javafx.scene.layout.RowConstraints?>
-<?import javafx.scene.shape.Rectangle?>
 <?import javafx.scene.text.Font?>
 
-<BorderPane fx:id="borderPane" prefHeight="405.0" prefWidth="720.0" xmlns="http://javafx.com/javafx/8.0.111" xmlns:fx="http://javafx.com/fxml/1" fx:controller="GameController">
+<BorderPane fx:id="borderPane" prefHeight="405.0" prefWidth="720.0" xmlns="http://javafx.com/javafx/8.0.111" xmlns:fx="http://javafx.com/fxml/1" fx:controller="def.GameController">
     <center>
-        <AnchorPane BorderPane.alignment="CENTER">
+        <AnchorPane fx:id="mainAPane" BorderPane.alignment="CENTER">
          <children>
             <AnchorPane fx:id="gameBackPane" layoutX="10.0" layoutY="10.0" minHeight="-Infinity" minWidth="-Infinity" prefHeight="200.0" prefWidth="200.0" AnchorPane.leftAnchor="10.0" AnchorPane.topAnchor="10.0" />
-            <Rectangle fx:id="backRectangle" arcHeight="5.0" arcWidth="5.0" fill="WHITE" height="343.0" stroke="BLACK" strokeType="INSIDE" strokeWidth="0.0" width="720.0" />
          </children></AnchorPane>
     </center>
     <bottom>

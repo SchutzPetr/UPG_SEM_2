@@ -1,7 +1,8 @@
-import entity.Entity;
-import entity.Position;
-import entity.Shooter;
-import entity.Target;
+package def;
+
+import def.entity.Position;
+import def.entity.Shooter;
+import def.entity.Target;
 import javafx.embed.swing.SwingFXUtils;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.Pane;
@@ -156,7 +157,7 @@ public class GameManager {
         this.target.repaint(this.widthOfColumn, this.heightOfColumn);
         this.shooter.repaint(this.widthOfColumn, this.heightOfColumn);
 
-        this.calculator.newCalculator2(0, 0, 0);
+        this.calculator.newCalculator2(0, 45, 100);
     }
 
     public BufferedImage getMapImage() {

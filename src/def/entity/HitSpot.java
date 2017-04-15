@@ -1,8 +1,9 @@
-package entity;
+package def.entity;
 
-import javafx.scene.layout.Pane;
+import def.GameManager;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Circle;
+import javafx.scene.shape.Shape;
 
 /**
  * Created by Petr Schutz on 21.03.2017
@@ -18,18 +19,22 @@ public class HitSpot extends Point {
      */
     private Circle circle;
 
+    private final GameManager gameManager;
+
 
     /**
      * Vytvoří instanci třídy {@code HitSpot}
      *
      * @param position pozice střely
+     * @param gameManager herní správce
      */
-    public HitSpot(Position position, Pane pane) {
+    public HitSpot(Position position, GameManager gameManager) {
         super(position);
+        this.gameManager = gameManager;
         circle = new Circle(position.getX(), position.getY(), 30);
         circle.setFill(Color.ORANGE);
 
-        pane.getChildren().add(circle);
+        gameManager.getGamePane().getChildren().add(circle);
 
         hide();
     }
@@ -45,10 +50,14 @@ public class HitSpot extends Point {
         circle.setRadius(scale * 30);
 
         setPosition(position);
+    }
+
+    @Override
+    public void setPosition(Position position) {
+        super.setPosition(position);
 
         circle.setCenterX(position.getX());
         circle.setCenterY(position.getY());
-
     }
 
     /**

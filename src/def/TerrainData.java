@@ -1,3 +1,5 @@
+package def;
+
 import java.util.List;
 
 /**
@@ -160,27 +162,38 @@ public class TerrainData {
         int xx = (int) ((x * 1000) / deltaX);
         int yy = (int) ((y * 1000) / deltaY);
 
-        if(yy == terrain.length-1 && xx == terrain[0].length-1){
-            corners[0] = terrain[yy][xx]/1000;
-            corners[1] = terrain[yy][xx]/1000;
-            corners[2] = terrain[yy][xx]/1000;
-            corners[3] = terrain[yy][xx]/1000;
-        }else if(yy == terrain.length-1){
-            corners[0] = terrain[yy][xx]/1000;
-            corners[1] = terrain[yy][xx+1]/1000;
-            corners[2] = terrain[yy][xx+1]/1000;
-            corners[3] = terrain[yy][xx]/1000;
-        }else if(xx == terrain.length-1){
-            corners[0] = terrain[yy][xx]/1000;
-            corners[1] = terrain[yy][xx]/1000;
-            corners[2] = terrain[yy-1][xx]/1000;
-            corners[3] = terrain[yy-1][xx]/1000;
-        }else{
-            corners[0] = terrain[yy][xx]/1000;
-            corners[1] = terrain[yy][xx+1]/1000;
-            corners[2] = terrain[yy-1][xx+1]/1000;
-            corners[3] = terrain[yy-1][xx]/1000;
+
+        //System.out.println(xx + " - " +yy );
+
+        try{
+            if(yy == row-1 && xx == column-1){
+                corners[0] = terrain[yy][xx]/1000;
+                corners[1] = terrain[yy][xx]/1000;
+                corners[2] = terrain[yy][xx]/1000;
+                corners[3] = terrain[yy][xx]/1000;
+            }else if(yy == row-1){
+                corners[0] = terrain[yy][xx]/1000;
+                corners[1] = terrain[yy][xx+1]/1000;
+                corners[2] = terrain[yy][xx+1]/1000;
+                corners[3] = terrain[yy][xx]/1000;
+            }else if(xx == column-1){
+                corners[0] = terrain[yy][xx]/1000;
+                corners[1] = terrain[yy][xx]/1000;
+                corners[2] = terrain[yy+1][xx]/1000;
+                corners[3] = terrain[yy+1][xx]/1000;
+            } else{
+                corners[0] = terrain[yy][xx]/1000;
+                corners[1] = terrain[yy][xx+1]/1000;
+                corners[2] = terrain[yy+1][xx+1]/1000;
+                corners[3] = terrain[yy+1][xx]/1000;
+            }
+        }catch(ArrayIndexOutOfBoundsException e){
+            System.out.println(xx + " - " +yy );
+            System.out.println(terrain.length-1);
+            System.out.println(terrain[0].length-1);
         }
+
+
         return corners;
     }
 
@@ -193,6 +206,12 @@ public class TerrainData {
      * @return výšku v daném bodě
      */
     public double getAltitudeInM(double x, double y) {
+        int xxx = (int) ((x * 1000) / deltaX);
+        int yyy = (int) ((y * 1000) / deltaY);
+
+        if(xxx >= column || yyy >= row ||xxx < 0 || yyy < 0 ){
+            return -1.0;
+        }
         int[] corners = getAltitudeInSquareCorners(x, y);
 
         double xx = x - ((int)((x * 1000) / deltaX));

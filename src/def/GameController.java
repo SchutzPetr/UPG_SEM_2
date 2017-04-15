@@ -1,3 +1,5 @@
+package def;
+
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
@@ -5,6 +7,7 @@ import javafx.scene.control.TextField;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.BorderPane;
+import javafx.scene.shape.Rectangle;
 
 import java.net.URL;
 import java.util.ResourceBundle;
@@ -77,6 +80,15 @@ public class GameController {
     @FXML
     private Label outOfMap; // Value injected by FXMLLoader
 
+    /**
+     * Komponenta GUI fx:id="outOfMap"
+     */
+
+    private Rectangle backRectangle; // Value injected by FXMLLoader
+
+    @FXML
+    private AnchorPane mainAPane;
+
     private ImageView game;
 
     /**
@@ -101,6 +113,10 @@ public class GameController {
         game.setLayoutY(0);
 
         gameBackPane.getChildren().add(game);
+
+        backRectangle = new Rectangle();
+        backRectangle.setX(10);
+        backRectangle.setY(10);
 
     }
 
@@ -127,9 +143,20 @@ public class GameController {
     void paintMap(double width, double height) {
 
         gameBackPane.setPrefSize(width, height);
+
+        backRectangle.setWidth(width);
+        backRectangle.setHeight(height);
+
+        mainAPane.setClip(backRectangle);
+
     }
 
     public AnchorPane getGameBackPane() {
         return gameBackPane;
     }
+
+    public Rectangle getBackRectangle() {
+        return backRectangle;
+    }
+
 }

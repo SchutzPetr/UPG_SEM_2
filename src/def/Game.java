@@ -1,3 +1,5 @@
+package def;
+
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
@@ -62,9 +64,9 @@ public class Game extends Application {
             primaryStage.setScene(scene);
 
 
-            //gameManager = new GameManager("rovny1metr.ter", loader.getController());
+            gameManager = new GameManager("rovny1metr.ter", loader.getController());
 
-            gameManager = new GameManager("sikmy45stupnu.ter", loader.getController());
+            //gameManager = new GameManager("sikmy45stupnu.ter", loader.getController());
 
             //gameManager = new GameManager("terrain512x512.ter", loader.getController());
 
