@@ -1,8 +1,3 @@
-package def;
-
-import def.entity.Position;
-import def.entity.Shooter;
-import def.entity.Target;
 import javafx.embed.swing.SwingFXUtils;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.Pane;
@@ -75,9 +70,15 @@ public class GameManager {
      */
     private final Shooter shooter;
 
+    /**
+     * Instance třídy {@code ShootingCalculator}
+     */
+    private final ShootingCalculator calculator;
+
     GameManager(String terrainDataFile, GameController gameController) {
         this.terrainData = TerrainData.loadTerrain(terrainDataFile);
         this.gameController = gameController;
+        this.gameController.setGameManager(this);
 
         int[][] data = terrainData.getTerrain();
 
@@ -122,13 +123,11 @@ public class GameManager {
 
         this.shooter = new Shooter(new Position(this.terrainData.getShooterX()*this.terrainData.getDeltaX(),
                 this.terrainData.getShooterY()*this.terrainData.getDeltaY(), this.terrainData.getTargetAltitudeInM()),
-                this.terrainData.getShooterX(), this.terrainData.getShooterY(), this.getGamePane(), this.target);
+                this.terrainData.getShooterX(), this.terrainData.getShooterY(), this, this.target);
 
         calculator = new ShootingCalculator(this, this.shooter, this.target);
 
     }
-
-    private ShootingCalculator calculator;
 
     /**
      * Metoda, která vykresluje herní plochu
@@ -149,7 +148,6 @@ public class GameManager {
         }
 
         this.gameController.paintMap(this.gameWidth, this.gameHeight);
-        this.gameController.paintLeftPane(width/100*25);
         this.widthOfColumn = this.gameWidth / this.terrainData.getColumns();
         this.heightOfColumn = this.gameHeight / this.terrainData.getRows();
 
@@ -158,7 +156,7 @@ public class GameManager {
         this.target.repaint(this.widthOfColumn, this.heightOfColumn);
         this.shooter.repaint(this.widthOfColumn, this.heightOfColumn);
 
-        this.calculator.newCalculator2(0, 45, 100);
+        this.calculator.recalculate();
     }
 
     public BufferedImage getMapImage() {
@@ -183,5 +181,13 @@ public class GameManager {
 
     public double getScale() {
         return scale;
+    }
+
+    public ShootingCalculator getCalculator() {
+        return calculator;
+    }
+
+    public Shooter getShooter() {
+        return shooter;
     }
 }

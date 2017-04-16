@@ -1,5 +1,3 @@
-package def.entity;
-
 import javafx.scene.layout.Pane;
 
 /**
@@ -22,6 +20,6 @@ public class Target extends Entity {
      * @param pane   herní plocha na kterou se střelec vykrelsí
      */
     public Target(Position position, int column, int row, Pane pane) {
-        super(position, column, row, pane, "/img/Tank_Target.png");
+        super(position, column, row, pane, "/Tank_Target.png");
     }
 }

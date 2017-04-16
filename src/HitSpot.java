@@ -1,9 +1,5 @@
-package def.entity;
-
-import def.GameManager;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Circle;
-import javafx.scene.shape.Shape;
 
 /**
  * Created by Petr Schutz on 21.03.2017

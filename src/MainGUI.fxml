@@ -11,7 +11,7 @@
 <?import javafx.scene.layout.RowConstraints?>
 <?import javafx.scene.text.Font?>
 
-<BorderPane fx:id="borderPane" prefHeight="405.0" prefWidth="720.0" xmlns="http://javafx.com/javafx/8.0.111" xmlns:fx="http://javafx.com/fxml/1" fx:controller="def.GameController">
+<BorderPane fx:id="borderPane" prefHeight="405.0" prefWidth="720.0" xmlns="http://javafx.com/javafx/8.0.111" xmlns:fx="http://javafx.com/fxml/1" fx:controller="GameController">
     <center>
         <AnchorPane fx:id="mainAPane" BorderPane.alignment="CENTER">
          <children>
@@ -44,13 +44,14 @@
                         <Insets left="5.0" right="5.0" />
                     </GridPane.margin>
                 </TextField>
+            <TextField fx:id="speedTextField" minHeight="0.0" minWidth="0.0" promptText="Rychlost střely v m/s" GridPane.columnIndex="2" />
                 <Button fx:id="fireButton" defaultButton="true" minHeight="0.0" minWidth="0.0" mnemonicParsing="false" text="Pal!" GridPane.columnIndex="3">
                     <font>
                         <Font size="13.0" />
                     </font>
                 </Button>
                 <Label fx:id="angleLabel" minHeight="0.0" minWidth="0.0" text="Label" visible="false" GridPane.rowIndex="1" />
-                <Label fx:id="radiusLabel" minHeight="0.0" minWidth="0.0" text="Label" visible="false" GridPane.columnIndex="1" GridPane.rowIndex="1" />
+                <Label fx:id="elevationLabel" minHeight="0.0" minWidth="0.0" text="Label" visible="false" GridPane.columnIndex="1" GridPane.rowIndex="1" />
                 <Label fx:id="hitLabel" minHeight="0.0" minWidth="0.0" text="Zásah!" textFill="RED" visible="false" GridPane.columnIndex="3" GridPane.rowIndex="1">
                     <font>
                         <Font name="System Bold" size="18.0" />
@@ -61,7 +62,7 @@
                         <Font name="System Bold" size="16.0" />
                     </font>
                 </Label>
-            <TextField fx:id="speedTextField" minHeight="0.0" minWidth="0.0" promptText="Rychlost střely v m/s" GridPane.columnIndex="2" />
+            <Label fx:id="speedLabel" minHeight="0.0" minWidth="0.0" text="Label" visible="false" GridPane.columnIndex="2" GridPane.rowIndex="1" />
             </children>
         </GridPane>
     </bottom>

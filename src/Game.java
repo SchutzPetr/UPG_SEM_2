@@ -1,5 +1,3 @@
-package def;
-
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
@@ -58,7 +56,7 @@ public class Game extends Application {
             root = loader.load();
 
             primaryStage.setTitle("Schutz Petr - A16B0130P");
-            primaryStage.getIcons().add(new Image("img/Tank.png"));
+            primaryStage.getIcons().add(new Image("Tank.png"));
 
             Scene scene = new Scene(root, 720, 405);
             primaryStage.setScene(scene);

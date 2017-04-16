@@ -1,7 +1,3 @@
-package def.entity;
-
-import def.Vector3D;
-
 /**
  * Created by Petr Schutz on 20.03.2017
  * <p>

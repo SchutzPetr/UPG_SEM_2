@@ -1,6 +1,3 @@
-
-package def.entity;
-
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.Pane;
 

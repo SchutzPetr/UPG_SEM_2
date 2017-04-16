@@ -1,5 +1,5 @@
-package def;
-
+import javafx.animation.KeyFrame;
+import javafx.animation.Timeline;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
@@ -8,6 +8,7 @@ import javafx.scene.image.ImageView;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.shape.Rectangle;
+import javafx.util.Duration;
 
 import java.net.URL;
 import java.util.ResourceBundle;
@@ -44,12 +45,6 @@ public class GameController {
     private TextField angleTextField; // Value injected by FXMLLoader
 
     /**
-     * Komponenta GUI fx:id="radiusTextField"
-     */
-    @FXML // fx:id="radiusTextField"
-    private TextField radiusTextField; // Value injected by FXMLLoader
-
-    /**
      * Komponenta GUI fx:id="fireButton"
      */
     @FXML // fx:id="fireButton"
@@ -62,10 +57,16 @@ public class GameController {
     private Label angleLabel; // Value injected by FXMLLoader
 
     /**
-     * Komponenta GUI fx:id="radiusLabel"
+     * Komponenta GUI fx:id="speedLabel"
+     */
+    @FXML // fx:id="speedLabel"
+    private Label speedLabel; // Value injected by FXMLLoader
+
+    /**
+     * Komponenta GUI fx:id="elevationLabel"
      */
     @FXML // fx:id="radiusLabel"
-    private Label radiusLabel; // Value injected by FXMLLoader
+    private Label elevationLabel; // Value injected by FXMLLoader
 
     /**
      * Komponenta GUI fx:id="hitLabel"
@@ -113,6 +114,7 @@ public class GameController {
 
     private double leftPaneWidth;
     private double leftPaneHeight;
+    private GameManager gameManager;
 
     /**
      * This method is called by the FXMLLoader when initialization is complete
@@ -122,10 +124,8 @@ public class GameController {
         assert borderPane != null : "fx:id=\"borderPane\" was not injected: check your FXML file 'Game.fxml'.";
         assert gameBackPane != null : "fx:id=\"gameBackPane\" was not injected: check your FXML file 'Game.fxml'.";
         assert angleTextField != null : "fx:id=\"angleTextField\" was not injected: check your FXML file 'Game.fxml'.";
-        assert radiusTextField != null : "fx:id=\"radiusTextField\" was not injected: check your FXML file 'Game.fxml'.";
         assert fireButton != null : "fx:id=\"fireButton\" was not injected: check your FXML file 'Game.fxml'.";
         assert angleLabel != null : "fx:id=\"angleLabel\" was not injected: check your FXML file 'Game.fxml'.";
-        assert radiusLabel != null : "fx:id=\"radiusLabel\" was not injected: check your FXML file 'Game.fxml'.";
         assert hitLabel != null : "fx:id=\"hitLabel\" was not injected: check your FXML file 'Game.fxml'.";
         assert outOfMap != null : "fx:id=\"outOfMap\" was not injected: check your FXML file 'Game.fxml'.";
 
@@ -145,23 +145,96 @@ public class GameController {
         backRectangle.setX(10);
         backRectangle.setY(10);
 
-        leftPane.widthProperty().addListener((observable, oldValue, newValue) -> {
-            this.leftPaneWidth = newValue.doubleValue();
-            if(this.leftPaneHeight>newValue.doubleValue()){
-                compass.changeRadius((newValue.doubleValue()-20)/2);
-                compass.setX(newValue.doubleValue()/2);
-                compass.setX(newValue.doubleValue()/2);
+        speedTextField.textProperty().addListener((observable, oldValue, newValue) -> {
+            if (!Utils.isDouble(newValue)) {
+                speedTextField.setStyle("-fx-background-color: rgba(199, 0, 57, 0.20);");
+            } else {
+                speedTextField.setStyle("");
+                speedLabel.setVisible(false);
             }
         });
 
-        leftPane.heightProperty().addListener((observable, oldValue, newValue) ->  {
-            this.leftPaneHeight = newValue.doubleValue();
-            if(this.leftPaneWidth>newValue.doubleValue()){
-                compass.changeRadius((newValue.doubleValue()-20)/2);
-                compass.setX(newValue.doubleValue()/2);
-                compass.setX(newValue.doubleValue()/2);
+        elevationTextField.textProperty().addListener((observable, oldValue, newValue) -> {
+            if (!Utils.isDouble(newValue)) {
+                elevationTextField.setStyle("-fx-background-color: rgba(199, 0, 57, 0.20);");
+            } else if (!Utils.isValidElevationValue(Double.parseDouble(newValue))) {
+                elevationTextField.setStyle("-fx-background-color: rgba(199, 0, 57, 0.20);");
+            } else {
+
+                elevationTextField.setStyle("");
+                elevationLabel.setVisible(false);
             }
         });
+
+        angleTextField.textProperty().addListener((observable, oldValue, newValue) -> {
+            if (!Utils.isDouble(newValue)) {
+                angleTextField.setStyle("-fx-background-color: rgba(199, 0, 57, 0.20);");
+            } else if (!Utils.isValidAngleValue(Double.parseDouble(newValue))) {
+                angleTextField.setStyle("-fx-background-color: rgba(199, 0, 57, 0.20);");
+            } else {
+
+                angleTextField.setStyle("");
+                angleLabel.setVisible(false);
+            }
+        });
+
+        fireButton.setOnAction(event -> {
+
+            double speed = -1;
+            double angle = -9999;
+            double elevation = -9999;
+
+            if (Utils.isDouble(speedTextField.getText())) {
+                speed = Double.parseDouble(speedTextField.getText());
+                if (speed < 0) {
+                    speedTextField.setText("Zadejte nezáporné cislo!");
+                    speedTextField.setVisible(true);
+                    speed = -1;
+                }
+            } else {
+                speedLabel.setText("Zadejte platne realne cislo!");
+                speedTextField.setVisible(true);
+            }
+
+            if (Utils.isDouble(elevationTextField.getText())) {
+                elevation = Double.parseDouble(elevationTextField.getText());
+            } else {
+                elevationLabel.setText("Zadejte platne realne cislo!");
+                elevationLabel.setVisible(true);
+            }
+
+            if (Utils.isDouble(angleTextField.getText())) {
+                angle = Double.parseDouble(angleTextField.getText());
+            } else {
+                angleLabel.setText("Zadejte platne realne cislo!");
+                angleLabel.setVisible(true);
+            }
+
+            if (!Utils.isValidAngleValue(angle)) {
+                angleLabel.setText("Zadejte realne cislo v rozsahu -90 az 180");
+                angleLabel.setVisible(true);
+            }else if(!Utils.isValidElevationValue(elevation)) {
+                elevationLabel.setText("Zadejte realne cislo v rozsahu -90 az 90");
+                elevationLabel.setVisible(true);
+            } else if (speed != -1 && angle != -9999 && elevation != -9999) {
+
+                gameManager.getShooter().shoot(angle, elevation, speed);
+
+                angleLabel.setVisible(false);
+                speedLabel.setVisible(false);
+                elevationLabel.setVisible(false);
+            }
+        });
+
+        final Timeline timeline = new Timeline(new KeyFrame(Duration.millis(200), actionEvent -> {
+            Wind wind = WindSpeedGenerator.generate();
+
+            compass.setAngle(wind.getAngle());
+            compass.setLengthPercent(wind.getSpeed() / 2);
+        }));
+        timeline.setCycleCount(Timeline.INDEFINITE);
+        timeline.play();
+
     }
 
     void setGame(ImageView game) {
@@ -194,16 +267,6 @@ public class GameController {
         mainAPane.setClip(backRectangle);
     }
 
-    /**
-     * Metoda, která vykresluje herní mapu
-     *
-     * @param width  šířka herní mapy
-     */
-    void paintLeftPane(double width) {
-        leftPane.setPrefWidth(width);
-
-    }
-
 
     public AnchorPane getGameBackPane() {
         return gameBackPane;
@@ -213,4 +276,29 @@ public class GameController {
         return backRectangle;
     }
 
+    public GameManager getGameManager() {
+        return gameManager;
+    }
+
+    public void setGameManager(GameManager gameManager) {
+        this.gameManager = gameManager;
+    }
+
+    /**
+     * Metoda, která skryje či zobrazí text řikající, zda uživatel střelil mimo mapu, či nikoli
+     *
+     * @param outOfMap strela je mimo mapu?
+     */
+    public void setOutOfMap(boolean outOfMap) {
+        this.outOfMap.setVisible(outOfMap);
+    }
+
+    /**
+     * Metoda, která skryje či zobrazí text řikající, zda uživatel zasáhl cíl, či nikoli
+     *
+     * @param hit zásah?
+     */
+    public void setHit(boolean hit) {
+        hitLabel.setVisible(hit);
+    }
 }

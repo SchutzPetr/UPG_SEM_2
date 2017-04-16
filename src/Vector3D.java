@@ -1,5 +1,3 @@
-package def;
-
 /**
  * Created by Petr Schutz on 20.03.2017
  * <p>

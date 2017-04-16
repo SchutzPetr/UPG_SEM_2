@@ -1,5 +1,3 @@
-package def;
-
 import java.util.Random;
 
 /**
@@ -21,14 +19,12 @@ public class WindSpeedGenerator {
         if(currentSpeedMin < 0)currentSpeedMin = 0;
         if(currentSpeedMax > 200)currentSpeedMax = 200;
 
-        System.out.println(currentSpeedMin + "-" + currentSpeedMax);
         currentSpeed = randomNumbers(currentSpeedMin, currentSpeedMax);
 
         int currentDirectionDispersion = currentDirection/100*20;
         int currentDirectionMin = currentDirection - currentDirectionDispersion;
         int currentDirectionMax = currentDirection + currentDirectionDispersion;
 
-        System.out.println(currentDirectionMax + "-" + currentDirectionMin);
         currentDirection = randomNumbers(currentDirectionMin, currentDirectionMax);
 
         if(currentDirection < 0){
@@ -38,7 +34,7 @@ public class WindSpeedGenerator {
             currentDirection = currentDirection-360;
         }
 
-        return new Wind(Math.cos(Math.toRadians(currentDirection)) * currentSpeed, Math.sin(Math.toRadians(currentDirection)) * currentSpeed, 0, currentDirection, currentSpeed);
+        return new Wind(Math.cos(Math.toRadians(currentDirection)) * currentSpeed, Math.sin(Math.toRadians(currentDirection)) * currentSpeed*-1, 0, currentDirection, currentSpeed);
     }
 
     public static int randomNumbers(int min, int max) {

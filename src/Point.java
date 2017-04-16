@@ -1,5 +1,3 @@
-package def.entity;
-
 /**
  * Created by Petr Schutz on 21.03.2017
  * <p>
