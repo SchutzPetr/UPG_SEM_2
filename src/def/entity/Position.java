@@ -1,5 +1,7 @@
 package def.entity;
 
+import def.Vector3D;
+
 /**
  * Created by Petr Schutz on 20.03.2017
  * <p>
@@ -9,11 +11,7 @@ package def.entity;
  * @author Petr Schutz
  * @version 1.0
  */
-public class Position {
-    /**
-     * Souřadnice x a y a z
-     */
-    private final double x, y, z;
+public class Position extends Vector3D{
 
 
     /**
@@ -21,46 +19,9 @@ public class Position {
      *
      * @param x souřadnice x
      * @param y souřadnice y
+     * @param z souradnice z
      */
     public Position(double x, double y, double z) {
-        this.x = x;
-        this.y = y;
-        this.z = z;
-    }
-
-    /**
-     * Metoda navrací souřadnice X
-     *
-     * @return x
-     */
-    public double getX() {
-        return x;
-    }
-
-    /**
-     * Metoda navrací souřadnice y
-     *
-     * @return y
-     */
-    public double getY() {
-        return y;
-    }
-
-    /**
-     * Metoda navrací souřadnice z
-     *
-     * @return z
-     */
-    public double getZ() {
-        return z;
-    }
-
-    @Override
-    public String toString() {
-        return "{" +
-                "x=" + x +
-                ", y=" + y +
-                ", z=" + z +
-                '}';
+        super(x, y, z);
     }
 }

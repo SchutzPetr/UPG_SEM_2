@@ -65,4 +65,7 @@
             </children>
         </GridPane>
     </bottom>
+   <right>
+      <AnchorPane fx:id="leftPane" maxWidth="-Infinity" prefHeight="200.0" prefWidth="100.0" BorderPane.alignment="CENTER" />
+   </right>
 </BorderPane>

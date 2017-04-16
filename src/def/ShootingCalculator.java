@@ -122,9 +122,53 @@ public class ShootingCalculator {
 
 
         trajectoryVectors.forEach(System.out::println);
+    }
+
+    public void recalculate(){
+        if (trajectoryVectors.isEmpty())return;
+
+        gameManager.getGamePane().getChildren().removeAll(lines);
+        lines.clear();
+
+        Position prev = trajectoryVectors.get(0);
+        Position current = null;
+
+        double x = Math.cos(Math.toRadians(lastAzimuth)) * Math.abs(prev.getX());
+        double y = Math.sin(Math.toRadians(lastAzimuth)) * Math.abs(prev.getX());
+
+        double lastPosX = shooter.getPosition().getX() + (x * this.gameManager.getScale());
+        double lastPosY = shooter.getPosition().getY() + (this.gameManager.getScale()*(y + prev.getY()));
+
+        for (int i = 1; i < trajectoryVectors.size(); i++) {
+            current = trajectoryVectors.get(i);
+
+            Line line = new Line();
+
+            line.setStartX(lastPosX);
+            line.setStartY(lastPosY);
+
+            x = Math.cos(Math.toRadians(lastAzimuth)) * Math.abs(current.getX());
+            y = Math.sin(Math.toRadians(lastAzimuth)) * Math.abs(current.getX());
+
+            lastPosX = shooter.getPosition().getX() + (x * this.gameManager.getScale());
+            lastPosY = shooter.getPosition().getY() + (this.gameManager.getScale()*(y + current.getY()));
 
 
+            line.setEndX(lastPosX);
+            line.setEndY(lastPosY);
 
+            line.setStroke(Color.RED);
+            line.setStrokeWidth(1);
+
+            lines.add(line);
+        }
+
+        if(current != null){
+            hitSpot.repaint(new Position(lastPosX, lastPosY, 0.0), this.gameManager.getScale());
+            hitSpot.show();
+        }
+
+        gameManager.getGamePane().getChildren().addAll(lines);
     }
 
     public void newCalculator2(double azimuth, double elevation, double speed) {
@@ -168,7 +212,6 @@ public class ShootingCalculator {
 
         if(current != null){
             hitSpot.repaint(new Position(lastPosX, lastPosY, 0.0), this.gameManager.getScale());
-            System.out.println(hitSpot.getPosition());
             hitSpot.show();
         }
 

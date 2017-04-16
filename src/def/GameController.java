@@ -13,7 +13,6 @@ import java.net.URL;
 import java.util.ResourceBundle;
 
 public class GameController {
-
     /**
      * ResourceBundle that was given to the FXMLLoader
      */
@@ -80,16 +79,40 @@ public class GameController {
     @FXML
     private Label outOfMap; // Value injected by FXMLLoader
 
-    /**
-     * Komponenta GUI fx:id="outOfMap"
-     */
 
     private Rectangle backRectangle; // Value injected by FXMLLoader
 
+    /**
+     * Komponenta GUI fx:id="mainAPane"
+     */
     @FXML
-    private AnchorPane mainAPane;
+    private AnchorPane mainAPane; // Value injected by FXMLLoader
+
+    /**
+     * Komponenta GUI fx:id="elevationTextField"
+     */
+    @FXML
+    private TextField elevationTextField; // Value injected by FXMLLoader
+
+    /**
+     * Komponenta GUI fx:id="speedTextField"
+     */
+    @FXML
+    private TextField speedTextField; // Value injected by FXMLLoader
+
+    /**
+     * Komponenta GUI fx:id="leftPane"
+     */
+    @FXML
+    private AnchorPane leftPane; // Value injected by FXMLLoader
+
+
 
     private ImageView game;
+    private WindCompass compass;
+
+    private double leftPaneWidth;
+    private double leftPaneHeight;
 
     /**
      * This method is called by the FXMLLoader when initialization is complete
@@ -109,6 +132,10 @@ public class GameController {
         game = new ImageView();
 
 
+        compass = new WindCompass(50, 50, 0, 40, 2);
+
+        leftPane.getChildren().add(compass);
+
         game.setLayoutX(0);
         game.setLayoutY(0);
 
@@ -118,6 +145,23 @@ public class GameController {
         backRectangle.setX(10);
         backRectangle.setY(10);
 
+        leftPane.widthProperty().addListener((observable, oldValue, newValue) -> {
+            this.leftPaneWidth = newValue.doubleValue();
+            if(this.leftPaneHeight>newValue.doubleValue()){
+                compass.changeRadius((newValue.doubleValue()-20)/2);
+                compass.setX(newValue.doubleValue()/2);
+                compass.setX(newValue.doubleValue()/2);
+            }
+        });
+
+        leftPane.heightProperty().addListener((observable, oldValue, newValue) ->  {
+            this.leftPaneHeight = newValue.doubleValue();
+            if(this.leftPaneWidth>newValue.doubleValue()){
+                compass.changeRadius((newValue.doubleValue()-20)/2);
+                compass.setX(newValue.doubleValue()/2);
+                compass.setX(newValue.doubleValue()/2);
+            }
+        });
     }
 
     void setGame(ImageView game) {
@@ -148,8 +192,18 @@ public class GameController {
         backRectangle.setHeight(height);
 
         mainAPane.setClip(backRectangle);
+    }
+
+    /**
+     * Metoda, která vykresluje herní mapu
+     *
+     * @param width  šířka herní mapy
+     */
+    void paintLeftPane(double width) {
+        leftPane.setPrefWidth(width);
 
     }
+
 
     public AnchorPane getGameBackPane() {
         return gameBackPane;

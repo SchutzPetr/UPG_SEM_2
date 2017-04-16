@@ -137,7 +137,7 @@ public class GameManager {
      * @param height výška herní plochy
      */
     void paint(double width, double height) {
-        double maxW = width - 20;
+        double maxW = width - 20 - (width/100*25);
         double maxH = height - 20 - 70;
 
         if (maxW / this.ratio > maxH) {
@@ -149,6 +149,7 @@ public class GameManager {
         }
 
         this.gameController.paintMap(this.gameWidth, this.gameHeight);
+        this.gameController.paintLeftPane(width/100*25);
         this.widthOfColumn = this.gameWidth / this.terrainData.getColumns();
         this.heightOfColumn = this.gameHeight / this.terrainData.getRows();
 
